@@ -1,0 +1,32 @@
+// Common styles
+html, body, h1, h2, h3, h4, h5, h6, p, ol, ul { margin:0; padding:0;}
+body {}
+input:focus, button:focus, select:focus, a:focus, a:focus img, textarea:focus, :focus {outline:none;}
+textarea {resize:none;}
+img { vertical-align:middle; max-width:100%;}
+a {}
+a, a:focus, a:hover{text-decoration:none;}
+ol, ul { list-style:none;}
+.clear { clear:both;}
+.fL { float:left;}
+.fR {float:right;}
+
+// Clearfix
+.clearfix {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+.block{ display: block;}
+// Type
+p {padding-bottom:15px;}
+.center-block{ float:none !important; margin:0 auto;}
+.container { margin:0 auto; padding-left:15px; padding-right:15px; width:990px;}
+@media (max-width: 1024px){
+    .container{width:auto}
+}
