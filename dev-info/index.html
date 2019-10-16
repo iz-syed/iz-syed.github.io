@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href='css/main.css' rel='stylesheet' type='text/css' />
 	<title>Operating System | Browser + Version </title>
 	<style>
-		body {
-			border:15px solid black;
-			text-align:center;
+		/*body {
+			font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+			font-size: 13px;
+			line-height: 18px;
+			color: #222;
+			background-color: #fff;
+			-webkit-font-smoothing: antialiased;
 		}
+
+		.blob {
+			background-color: #efefef;
+			font-size: 24px;
+			line-height: 45px;
+			padding: 30px;
+			border-radius: 5px;
+			margin-bottom: 30px;
+			border: 1px solid #ccc;
+		}*/
 	</style>
 </head>
 
 <body>
 
-	<h1 id="demo"></h1> 
+	<h1 id="demo" class="blob"></h1>
+
+	<span></span>
 
 
 
-	
+
 	<script src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
 	<script src="js/getBrowser.js"></script>
-
-	<script>
-	/*	// Get OS
-		var os = [ 'iphone', 'ipad', 'windows', 'mac', 'linux'];
-		var match = navigator.appVersion.toLowerCase().match(new RegExp(os.join('|')));
-		var classes = match[0]+' '+$.browser.name+' '+$.browser.version;
-
-		// it's binding to body class
-		if (match) {$('body').addClass(classes);};
-
-		// Secondary just print purpose
-		document.getElementById("demo").innerHTML = (classes); */
-	</script>
 </body>
+
 </html>
