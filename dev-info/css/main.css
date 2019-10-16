@@ -44,8 +44,23 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
-/* line 20, ../sass/main.scss */
+/* line 36, ../sass/main.scss */
 body {
   min-height: 100vh;
   background-color: #0b0b0b;
   color: #48515a; }
+  /* line 41, ../sass/main.scss */
+  body.windows {
+    background: transparent url("../images/windows.png") no-repeat;
+    background-size: cover; }
+
+/* line 49, ../sass/main.scss */
+h1 {
+  font-family: Droid Sans; }
+
+/* line 64, ../sass/main.scss */
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; }

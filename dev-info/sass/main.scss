@@ -1,3 +1,13 @@
+$asset-base-path: '../' !default;
+
+@function asset($type, $file) {
+  @return url($asset-base-path +  $type + '/' + $file);
+}
+
+@function image($file) {
+  @return asset('images', $file);
+}
+
 // importer
 @import 'reset';
 
@@ -7,6 +17,7 @@ $dark-1 : #0b0b0b;
 $dark-2 : #14151a;
 $light-1 : #e4f0fc;
 $light-2 : #48515a;
+$font-stack :Droid Sans;
 
 //  Mixin
 
@@ -17,17 +28,44 @@ $light-2 : #48515a;
 
 @include google-font("Droid Sans");
 
+@mixin fullHeight {
+    min-height: 100vh;
+}
+
+
 body {
-    min-height:100vh;
-    background-color:$dark-1;
-    color:$light-2
+    @include fullHeight;
+    background-color: $dark-1;
+    color: $light-2;
+
+    &.windows {
+        background:transparent image('windows.png') no-repeat;
+        background-size:cover;
+    }
 }
 
 
 
 h1 {
-    // @include google-font("Droid Sans");
+    font-family:$font-stack;
 }
 
+// .parent {
+//     position: relative;
+// }
+
+// .child {
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+// }
+
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include fullHeight;
+}
 
 //
