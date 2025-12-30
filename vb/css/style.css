@@ -130,7 +130,9 @@
    Base Styles
    ============================================= */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -465,12 +467,12 @@ body {
     flex-shrink: 0;
 }
 
-.checkbox-item input:checked + .checkbox-mark {
+.checkbox-item input:checked+.checkbox-mark {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
 }
 
-.checkbox-item input:checked + .checkbox-mark::after {
+.checkbox-item input:checked+.checkbox-mark::after {
     content: '';
     width: 6px;
     height: 10px;
@@ -788,6 +790,7 @@ body {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -921,12 +924,29 @@ body {
     border-radius: 3px;
 }
 
-.legend-dot.noun { background-color: var(--color-noun); }
-.legend-dot.verb { background-color: var(--color-verb); }
-.legend-dot.adjective { background-color: var(--color-adjective); }
-.legend-dot.adverb { background-color: var(--color-adverb); }
-.legend-dot.idiom { background-color: var(--color-idiom); }
-.legend-dot.collocation { background-color: var(--color-collocation); }
+.legend-dot.noun {
+    background-color: var(--color-noun);
+}
+
+.legend-dot.verb {
+    background-color: var(--color-verb);
+}
+
+.legend-dot.adjective {
+    background-color: var(--color-adjective);
+}
+
+.legend-dot.adverb {
+    background-color: var(--color-adverb);
+}
+
+.legend-dot.idiom {
+    background-color: var(--color-idiom);
+}
+
+.legend-dot.collocation {
+    background-color: var(--color-collocation);
+}
 
 /* =============================================
    Right Panel - Vocabulary Reference
@@ -1055,12 +1075,35 @@ body {
     font-weight: 500;
 }
 
-.vocab-card-type.noun { background-color: var(--color-noun-bg); color: var(--color-noun); }
-.vocab-card-type.verb { background-color: var(--color-verb-bg); color: var(--color-verb); }
-.vocab-card-type.adjective { background-color: var(--color-adjective-bg); color: var(--color-adjective); }
-.vocab-card-type.adverb { background-color: var(--color-adverb-bg); color: var(--color-adverb); }
-.vocab-card-type.idiom { background-color: var(--color-idiom-bg); color: var(--color-idiom); }
-.vocab-card-type.collocation { background-color: var(--color-collocation-bg); color: var(--color-collocation); }
+.vocab-card-type.noun {
+    background-color: var(--color-noun-bg);
+    color: var(--color-noun);
+}
+
+.vocab-card-type.verb {
+    background-color: var(--color-verb-bg);
+    color: var(--color-verb);
+}
+
+.vocab-card-type.adjective {
+    background-color: var(--color-adjective-bg);
+    color: var(--color-adjective);
+}
+
+.vocab-card-type.adverb {
+    background-color: var(--color-adverb-bg);
+    color: var(--color-adverb);
+}
+
+.vocab-card-type.idiom {
+    background-color: var(--color-idiom-bg);
+    color: var(--color-idiom);
+}
+
+.vocab-card-type.collocation {
+    background-color: var(--color-collocation-bg);
+    color: var(--color-collocation);
+}
 
 .vocab-card-phonetic {
     font-size: 0.75rem;
@@ -1176,6 +1219,7 @@ body {
         opacity: 0;
         transform: translateX(100%);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -1223,6 +1267,7 @@ body {
 }
 
 @media (max-width: 900px) {
+
     /* Hide vocab panel on smaller screens, move to bottom */
     .vocab-panel {
         display: none;
@@ -1240,11 +1285,6 @@ body {
         max-height: none;
         border-right: none;
         border-bottom: 1px solid var(--border-color);
-    }
-
-    .form-scroll {
-        max-height: none;
-        overflow: visible;
     }
 
     .output-panel {
@@ -1289,6 +1329,7 @@ body {
    ============================================= */
 
 @media print {
+
     .control-panel,
     .vocab-panel,
     .speech-controls,
@@ -1549,6 +1590,519 @@ body {
 }
 
 @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =============================================
+   Mobile Navigation Elements
+   ============================================= */
+
+/* Mobile Overlay */
+.mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+.mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Hamburger Menu Button */
+.mobile-hamburger {
+    position: fixed;
+    top: var(--space-4);
+    left: var(--space-4);
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-fast);
+}
+
+.mobile-hamburger:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.mobile-hamburger:hover .hamburger-line {
+    background-color: white;
+}
+
+.hamburger-line {
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+}
+
+.mobile-hamburger.active .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-hamburger.active .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-hamburger.active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.mobile-hamburger.active .hamburger-line {
+    background-color: white;
+}
+
+/* Vocabulary FAB */
+.vocab-fab {
+    position: fixed;
+    bottom: var(--space-6);
+    right: var(--space-6);
+    z-index: 1000;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    border: none;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-normal);
+    color: white;
+}
+
+.vocab-fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.vocab-fab:active {
+    transform: scale(0.95);
+}
+
+.vocab-fab.active {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    transform: rotate(180deg);
+}
+
+/* =============================================
+   Enhanced Mobile Responsive Styles
+   ============================================= */
+
+@media (max-width: 900px) {
+
+    /* Mobile Navigation - Slide-in Control Panel */
+    .control-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 85%;
+        max-width: 340px;
+        height: 100vh;
+        z-index: 999;
+        transform: translateX(-100%);
+        transition: transform var(--transition-slow);
+        border-right: 1px solid var(--border-color);
+        border-bottom: none;
+        overflow-y: auto;
+    }
+
+    .control-panel.mobile-open {
+        transform: translateX(0);
+    }
+
+    /* Mobile Navigation - Slide-in Vocabulary Panel */
+    .vocab-panel {
+        display: flex;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 85%;
+        max-width: 340px;
+        height: 100vh;
+        z-index: 999;
+        transform: translateX(100%);
+        transition: transform var(--transition-slow);
+        border-left: 1px solid var(--border-color);
+    }
+
+    .vocab-panel.mobile-open {
+        transform: translateX(0);
+    }
+
+    /* Adjust output panel for mobile */
+    .output-panel {
+        width: 100%;
+        min-height: 100vh;
+    }
+
+    /* Add padding for hamburger button */
+    .panel-header {
+        padding-left: calc(var(--space-5) + 56px);
+    }
+
+    /* Optimize touch targets */
+    .btn {
+        min-height: 48px;
+        padding: var(--space-3) var(--space-5);
+    }
+
+    .radio-card {
+        padding: var(--space-4);
+        min-height: 56px;
+    }
+
+    .checkbox-item {
+        padding: var(--space-3) 0;
+        min-height: 48px;
+    }
+
+    .form-select,
+    .form-input {
+        min-height: 48px;
+        padding: var(--space-3) var(--space-4);
+        font-size: 1rem;
+    }
+
+    .action-btn {
+        min-height: 44px;
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .speech-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* Improve spacing for mobile */
+    .form-section {
+        margin-bottom: var(--space-8);
+    }
+
+    .section-title {
+        font-size: 0.875rem;
+        margin-bottom: var(--space-4);
+    }
+
+    /* Better mobile modal */
+    .modal {
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    /* Optimize conversation bubbles for mobile */
+    .conversation-line {
+        gap: var(--space-2);
+    }
+
+    .speaker-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+
+    .conversation-bubble {
+        padding: var(--space-3);
+        font-size: 0.9375rem;
+    }
+
+    /* Better legend on mobile */
+    .legend {
+        padding: var(--space-3);
+    }
+
+    .legend-items {
+        gap: var(--space-2);
+    }
+
+    .legend-item {
+        font-size: 0.75rem;
+    }
+
+    /* Make speech controls sticky on mobile */
+    .speech-controls {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Make output stats sticky at bottom on mobile */
+    .output-stats {
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Further optimize for smaller tablets */
+    html {
+        font-size: 15px;
+    }
+
+    .logo-text h1 {
+        font-size: 1rem;
+    }
+
+    .logo-text p {
+        font-size: 0.7rem;
+    }
+
+    .settings-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+
+    .output-header h2 {
+        font-size: 1rem;
+    }
+
+    .vocab-header h3 {
+        font-size: 0.875rem;
+    }
+
+    .vocab-tabs {
+        gap: var(--space-1);
+    }
+
+    .vocab-tab {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 600px) {
+
+    /* Optimize for mobile phones */
+    .mobile-hamburger {
+        top: var(--space-3);
+        left: var(--space-3);
+        width: 44px;
+        height: 44px;
+    }
+
+    .vocab-fab {
+        bottom: var(--space-4);
+        right: var(--space-4);
+        width: 52px;
+        height: 52px;
+    }
+
+    .control-panel {
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .vocab-panel {
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .panel-header {
+        padding: var(--space-3) var(--space-4);
+        padding-left: calc(var(--space-4) + 52px);
+    }
+
+    .logo-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.125rem;
+    }
+
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .output-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .speech-controls {
+        padding: var(--space-2) var(--space-3);
+    }
+
+    .speech-buttons {
+        flex-wrap: wrap;
+    }
+
+    .speed-control {
+        width: 100%;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+        padding-top: var(--space-2);
+        margin-top: var(--space-2);
+    }
+
+    .conversation-container {
+        padding: var(--space-3);
+    }
+
+    .conversation-box {
+        max-width: 100%;
+    }
+
+    .output-stats {
+        flex-direction: column;
+        gap: var(--space-2);
+        padding: var(--space-3);
+    }
+
+    /* Stack form elements vertically */
+    .radio-group {
+        gap: var(--space-3);
+    }
+
+    /* Improve toast positioning on mobile */
+    .toast-container {
+        bottom: var(--space-4);
+        right: var(--space-4);
+        left: var(--space-4);
+    }
+
+    .toast {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Extra small devices */
+    html {
+        font-size: 14px;
+    }
+
+    .control-panel,
+    .vocab-panel {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .form-scroll {
+        padding: var(--space-4);
+    }
+
+    .action-buttons {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .modal {
+        width: 100%;
+        max-width: 100%;
+        border-radius: var(--radius-lg);
+    }
+
+    .vocab-card {
+        padding: var(--space-2);
+    }
+
+    .vocab-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Landscape orientation optimization */
+@media (max-height: 600px) and (orientation: landscape) {
+
+    .control-panel,
+    .vocab-panel {
+        overflow-y: auto;
+    }
+
+    .form-scroll {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+
+    .vocab-list {
+        max-height: calc(100vh - 200px);
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Increase touch targets for touch devices */
+    .radio-input {
+        width: 24px;
+        height: 24px;
+    }
+
+    .checkbox-mark {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Remove hover effects on touch devices */
+    .radio-card:hover {
+        background-color: var(--bg-secondary);
+        border-color: var(--border-color);
+    }
+
+    .btn:hover {
+        transform: none;
+    }
+
+    /* Add active states for better touch feedback */
+    .btn:active {
+        transform: scale(0.97);
+    }
+
+    .action-btn:active {
+        background-color: var(--bg-hover);
+    }
+
+    .radio-card:active {
+        background-color: var(--bg-tertiary);
+    }
 }

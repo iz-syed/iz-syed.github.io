@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vocabulary Bot - English Conversation Generator</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Left Panel - Controls -->
@@ -20,7 +22,8 @@
                 </div>
                 <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
                     <span class="theme-icon light-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <circle cx="12" cy="12" r="5"></circle>
                             <line x1="12" y1="1" x2="12" y2="3"></line>
                             <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -33,7 +36,8 @@
                         </svg>
                     </span>
                     <span class="theme-icon dark-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                     </span>
@@ -48,7 +52,9 @@
                 <button type="button" class="api-settings-btn" id="apiSettingsBtn" title="Configure AI API">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
                     </svg>
                     Settings
                 </button>
@@ -134,16 +140,8 @@
                     <section class="form-section">
                         <h3 class="section-title">Word Limit</h3>
                         <div class="word-limit-wrapper">
-                            <input
-                                type="number"
-                                id="wordLimit"
-                                name="wordLimit"
-                                class="form-input"
-                                placeholder="100"
-                                min="20"
-                                max="2000"
-                                value="100"
-                            >
+                            <input type="number" id="wordLimit" name="wordLimit" class="form-input" placeholder="100"
+                                min="20" max="2000" value="100">
                             <span class="input-hint">20 - 2,000 words</span>
                         </div>
                         <span class="error-message" id="wordLimitError"></span>
@@ -175,13 +173,15 @@
                 <!-- Sticky Action Buttons -->
                 <div class="action-buttons">
                     <button type="submit" class="btn btn-primary" id="generateBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
                         Generate
                     </button>
                     <button type="button" class="btn btn-secondary" id="resetBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <polyline points="1 4 1 10 7 10"></polyline>
                             <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
                         </svg>
@@ -196,7 +196,8 @@
             <!-- Empty State -->
             <div class="empty-state" id="emptyState">
                 <div class="empty-icon">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </div>
@@ -214,14 +215,16 @@
                     </div>
                     <div class="output-actions">
                         <button type="button" class="action-btn" id="copyBtn" title="Copy to clipboard">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                             </svg>
                             <span>Copy</span>
                         </button>
                         <button type="button" class="action-btn" id="exportVocabBtn" title="Export conversation">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                 <polyline points="7 10 12 15 17 10"></polyline>
                                 <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -250,7 +253,8 @@
                                 <polygon points="5 3 19 12 5 21 5 3"></polygon>
                             </svg>
                         </button>
-                        <button type="button" class="speech-btn" id="pauseBtn" title="Pause" disabled style="display: none;">
+                        <button type="button" class="speech-btn" id="pauseBtn" title="Pause" disabled
+                            style="display: none;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <rect x="6" y="4" width="4" height="16"></rect>
                                 <rect x="14" y="4" width="4" height="16"></rect>
@@ -333,7 +337,8 @@
                 <button type="button" class="modal-close" id="closeApiSettings">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="modal-desc">Configure an AI provider for natural conversation generation. Without configuration, the app uses pre-written dialogues.</p>
+                <p class="modal-desc">Configure an AI provider for natural conversation generation. Without
+                    configuration, the app uses pre-written dialogues.</p>
 
                 <div class="form-group">
                     <label for="llmProvider">AI Provider</label>
@@ -348,7 +353,8 @@
                     <label for="llmApiKey">API Key</label>
                     <input type="password" id="llmApiKey" class="form-input" placeholder="Enter your API key">
                     <small class="form-hint">
-                        Get a free Groq API key at <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>
+                        Get a free Groq API key at <a href="https://console.groq.com" target="_blank"
+                            rel="noopener">console.groq.com</a>
                     </small>
                 </div>
             </div>
@@ -377,8 +383,10 @@
     <script src="js/modules/speech.js"></script>
     <script src="js/modules/export.js"></script>
     <script src="js/modules/form-handler.js"></script>
+    <script src="js/modules/mobile-nav.js"></script>
 
     <!-- Main Application -->
     <script src="js/app.js"></script>
 </body>
+
 </html>

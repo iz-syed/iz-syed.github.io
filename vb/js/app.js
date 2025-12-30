@@ -235,6 +235,11 @@ const App = {
             // Render vocabulary panel
             VocabPanel.render('all');
 
+            // Close mobile menu if open (so user can see the generated content)
+            if (window.MobileNav && typeof window.MobileNav.closeControlPanelPublic === 'function') {
+                window.MobileNav.closeControlPanelPublic();
+            }
+
             // Show success message if using AI
             if (LLMService.isReady()) {
                 Utils.showToast('AI-generated conversation ready!');
