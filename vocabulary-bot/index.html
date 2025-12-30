@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Bot - English Conversation Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Panel - Controls -->
+        <aside class="control-panel">
+            <header class="panel-header">
+                <div class="logo">
+                    <span class="logo-icon">V</span>
+                    <div class="logo-text">
+                        <h1>Vocabulary Bot</h1>
+                        <p>English Conversation Generator</p>
+                    </div>
+                </div>
+                <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <span class="theme-icon light-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </span>
+                    <span class="theme-icon dark-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </span>
+                </button>
+            </header>
+
+            <!-- AI API Status -->
+            <div class="api-settings-bar">
+                <div class="api-status" id="apiStatus">
+                    <span class="status-dot"></span> Not Configured
+                </div>
+                <button type="button" class="api-settings-btn" id="apiSettingsBtn" title="Configure AI API">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Settings
+                </button>
+            </div>
+
+            <form id="generatorForm" class="control-form" novalidate>
+                <div class="form-scroll">
+                    <!-- Difficulty Section -->
+                    <section class="form-section">
+                        <h3 class="section-title">Difficulty Level</h3>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="difficulty" value="easy" class="radio-input">
+                                <span class="radio-content">
+                                    <span class="radio-title">Easy</span>
+                                    <span class="radio-desc">Simple words, short sentences</span>
+                                </span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="difficulty" value="medium" class="radio-input">
+                                <span class="radio-content">
+                                    <span class="radio-title">Medium</span>
+                                    <span class="radio-desc">Mixed vocabulary, varied structure</span>
+                                </span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="difficulty" value="hard" class="radio-input">
+                                <span class="radio-content">
+                                    <span class="radio-title">Hard</span>
+                                    <span class="radio-desc">Advanced words, complex sentences</span>
+                                </span>
+                            </label>
+                        </div>
+                        <span class="error-message" id="difficultyError"></span>
+                    </section>
+
+                    <!-- Topic Section -->
+                    <section class="form-section">
+                        <h3 class="section-title">Conversation Topic</h3>
+                        <select id="topic" name="topic" class="form-select">
+                            <option value="">-- Select a topic --</option>
+                            <option value="office">Office & Workplace</option>
+                            <option value="home">Home & Family</option>
+                            <option value="shopping">Shopping & Retail</option>
+                            <option value="meeting">Business Meeting</option>
+                            <option value="restaurant">Restaurant & Dining</option>
+                            <option value="travel">Travel & Vacation</option>
+                            <option value="health">Health & Medical</option>
+                            <option value="education">Education & School</option>
+                            <option value="technology">Technology & Gadgets</option>
+                            <option value="sports">Sports & Fitness</option>
+                            <option value="entertainment">Entertainment & Movies</option>
+                            <option value="weather">Weather & Seasons</option>
+                            <option value="finance">Banking & Finance</option>
+                            <option value="socialMedia">Social Media & Internet</option>
+                        </select>
+                        <span class="error-message" id="topicError"></span>
+                    </section>
+
+                    <!-- Language Settings -->
+                    <section class="form-section">
+                        <h3 class="section-title">Language Settings</h3>
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <label for="variant">English Variant</label>
+                                <select id="variant" name="variant" class="form-select-sm">
+                                    <option value="american">American</option>
+                                    <option value="british">British</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label for="tone">Tone</label>
+                                <select id="tone" name="tone" class="form-select-sm">
+                                    <option value="neutral">Neutral</option>
+                                    <option value="formal">Formal</option>
+                                    <option value="informal">Informal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Word Limit -->
+                    <section class="form-section">
+                        <h3 class="section-title">Word Limit</h3>
+                        <div class="word-limit-wrapper">
+                            <input
+                                type="number"
+                                id="wordLimit"
+                                name="wordLimit"
+                                class="form-input"
+                                placeholder="100"
+                                min="20"
+                                max="2000"
+                                value="100"
+                            >
+                            <span class="input-hint">20 - 2,000 words</span>
+                        </div>
+                        <span class="error-message" id="wordLimitError"></span>
+                    </section>
+
+                    <!-- Display Options -->
+                    <section class="form-section">
+                        <h3 class="section-title">Display Options</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="highlightWords" checked>
+                                <span class="checkbox-mark"></span>
+                                <span>Highlight vocabulary words</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="showDefinitions" checked>
+                                <span class="checkbox-mark"></span>
+                                <span>Show definitions on hover</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="showVocabPanel" checked>
+                                <span class="checkbox-mark"></span>
+                                <span>Show vocabulary panel</span>
+                            </label>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sticky Action Buttons -->
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary" id="generateBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        Generate
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="resetBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="1 4 1 10 7 10"></polyline>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+            </form>
+        </aside>
+
+        <!-- Center Panel - Conversation Output -->
+        <main class="output-panel">
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <h2>Ready to Generate</h2>
+                <p>Configure your settings and click "Generate" to create a conversation</p>
+            </div>
+
+            <!-- Output Content -->
+            <div class="output-content" id="outputContent">
+                <!-- Output Header with Actions -->
+                <header class="output-header">
+                    <div class="output-title-area">
+                        <h2>Generated Conversation</h2>
+                        <div class="output-meta" id="outputMeta"></div>
+                    </div>
+                    <div class="output-actions">
+                        <button type="button" class="action-btn" id="copyBtn" title="Copy to clipboard">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
+                        <button type="button" class="action-btn" id="exportVocabBtn" title="Export conversation">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span>Export</span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Conversation Display -->
+                <div class="conversation-container">
+                    <div class="conversation-box" id="conversationBox"></div>
+                </div>
+
+                <!-- Speech Controls -->
+                <div class="speech-controls" id="speechControls">
+                    <div class="speech-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="speechProgress"></div>
+                        </div>
+                        <span class="progress-text" id="speechProgressText">Ready</span>
+                    </div>
+                    <div class="speech-buttons">
+                        <button type="button" class="speech-btn" id="speakBtn" title="Play">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </button>
+                        <button type="button" class="speech-btn" id="pauseBtn" title="Pause" disabled style="display: none;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="4" width="4" height="16"></rect>
+                                <rect x="14" y="4" width="4" height="16"></rect>
+                            </svg>
+                        </button>
+                        <button type="button" class="speech-btn" id="resumeBtn" title="Resume" style="display: none;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </button>
+                        <button type="button" class="speech-btn" id="stopBtn" title="Stop" disabled>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                            </svg>
+                        </button>
+                        <div class="speed-control">
+                            <label for="speechSpeed">Speed:</label>
+                            <select id="speechSpeed" class="speed-select">
+                                <option value="0.5">0.5x</option>
+                                <option value="0.75">0.75x</option>
+                                <option value="1" selected>1x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="output-stats" id="outputStats"></div>
+            </div>
+        </main>
+
+        <!-- Right Panel - Vocabulary Reference -->
+        <aside class="vocab-panel" id="vocabPanel">
+            <header class="vocab-header">
+                <h3>Vocabulary Reference</h3>
+                <div class="vocab-tabs" id="vocabTabs">
+                    <button class="vocab-tab active" data-tab="all">All</button>
+                    <button class="vocab-tab" data-tab="nouns">Nouns</button>
+                    <button class="vocab-tab" data-tab="verbs">Verbs</button>
+                    <button class="vocab-tab" data-tab="adjectives">Adj</button>
+                    <button class="vocab-tab" data-tab="adverbs">Adv</button>
+                    <button class="vocab-tab" data-tab="idioms">Idioms</button>
+                </div>
+            </header>
+
+            <!-- Legend -->
+            <div class="legend" id="legend">
+                <span class="legend-title">Word Types:</span>
+                <div class="legend-items">
+                    <span class="legend-item"><span class="legend-dot noun"></span>Noun</span>
+                    <span class="legend-item"><span class="legend-dot verb"></span>Verb</span>
+                    <span class="legend-item"><span class="legend-dot adjective"></span>Adjective</span>
+                    <span class="legend-item"><span class="legend-dot adverb"></span>Adverb</span>
+                    <span class="legend-item"><span class="legend-dot idiom"></span>Idiom</span>
+                    <span class="legend-item"><span class="legend-dot collocation"></span>Collocation</span>
+                </div>
+            </div>
+
+            <div class="vocab-list" id="vocabList">
+                <div class="vocab-empty">
+                    <p>Generate a conversation to see vocabulary here</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- API Settings Modal -->
+    <div class="modal-overlay" id="apiSettingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>AI API Settings</h3>
+                <button type="button" class="modal-close" id="closeApiSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">Configure an AI provider for natural conversation generation. Without configuration, the app uses pre-written dialogues.</p>
+
+                <div class="form-group">
+                    <label for="llmProvider">AI Provider</label>
+                    <select id="llmProvider" class="form-select">
+                        <option value="groq">Groq (Free - requires API key)</option>
+                        <option value="mlvoca">MLVoca (Free - no key required)</option>
+                    </select>
+                    <small class="form-hint">Groq offers faster, higher-quality responses with a free API key.</small>
+                </div>
+
+                <div class="form-group" id="apiKeyGroup">
+                    <label for="llmApiKey">API Key</label>
+                    <input type="password" id="llmApiKey" class="form-input" placeholder="Enter your API key">
+                    <small class="form-hint">
+                        Get a free Groq API key at <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a>
+                    </small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="closeApiSettings2">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveApiSettings">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Files -->
+    <script src="js/data/vocabulary.js"></script>
+    <script src="js/data/conversation-flow.js"></script>
+    <script src="js/data/dialogues.js"></script>
+
+    <!-- Utility Modules -->
+    <script src="js/modules/utils.js"></script>
+    <script src="js/modules/theme.js"></script>
+
+    <!-- Core Modules -->
+    <script src="js/modules/llm-service.js"></script>
+    <script src="js/modules/conversation.js"></script>
+    <script src="js/modules/output-renderer.js"></script>
+    <script src="js/modules/vocab-panel.js"></script>
+    <script src="js/modules/tooltip.js"></script>
+    <script src="js/modules/speech.js"></script>
+    <script src="js/modules/export.js"></script>
+    <script src="js/modules/form-handler.js"></script>
+
+    <!-- Main Application -->
+    <script src="js/app.js"></script>
+</body>
+</html>
