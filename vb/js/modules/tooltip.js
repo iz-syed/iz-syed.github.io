@@ -33,10 +33,14 @@ const TooltipManager = {
         // Display the actual word from the text (capitalize first letter for display)
         const displayWord = word.charAt(0).toUpperCase() + word.slice(1);
 
+        const safePhonetic = details.phonetic ? Utils.escapeHtml(details.phonetic) : '';
+        const safeDef = Utils.escapeHtml(details.definition);
+        const safeExample = details.examples && details.examples[0] ? Utils.escapeHtml(details.examples[0]) : '';
+
         this.tooltip.innerHTML = `
-            <div class="tooltip-word">${displayWord}${details.phonetic ? `<span class="tooltip-phonetic">${details.phonetic}</span>` : ''}</div>
-            <div class="tooltip-definition">${details.definition}</div>
-            ${details.examples && details.examples[0] ? `<div class="tooltip-example">"${details.examples[0]}"</div>` : ''}
+            <div class="tooltip-word">${Utils.escapeHtml(displayWord)}${safePhonetic ? `<span class="tooltip-phonetic">${safePhonetic}</span>` : ''}</div>
+            <div class="tooltip-definition">${safeDef}</div>
+            ${safeExample ? `<div class="tooltip-example">"${safeExample}"</div>` : ''}
         `;
 
         const rect = target.getBoundingClientRect();

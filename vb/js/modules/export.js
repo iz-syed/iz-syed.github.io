@@ -16,9 +16,9 @@ const ExportManager = {
         }
 
         // Get conversation metadata
-        const topic = document.getElementById('topic').value;
+        const topic = document.getElementById('topic')?.value || '';
         const difficulty = document.querySelector('input[name="difficulty"]:checked')?.value || 'easy';
-        const tone = document.getElementById('tone').value;
+        const tone = document.getElementById('tone')?.value || 'neutral';
         const topicName = TopicNames[topic] || topic;
 
         // Build export content
@@ -69,47 +69,6 @@ const ExportManager = {
 
         this.downloadFile(content, filename, 'text/plain');
         Utils.showToast('Conversation exported successfully!');
-    },
-
-    /**
-     * Export vocabulary to CSV file (kept for potential future use)
-     */
-    exportVocabulary() {
-        const details = ConversationGenerator.vocabularyDetails;
-        const words = [];
-
-        Object.entries(details).forEach(([word, data]) => {
-            words.push({
-                word,
-                type: data.type,
-                definition: data.definition,
-                phonetic: data.phonetic || '',
-                synonyms: data.synonyms?.join(', ') || '',
-                examples: data.examples?.join(' | ') || ''
-            });
-        });
-
-        if (words.length === 0) {
-            Utils.showToast('No vocabulary to export', 'error');
-            return;
-        }
-
-        // Create CSV
-        const headers = ['Word', 'Type', 'Definition', 'Phonetic', 'Synonyms', 'Examples'];
-        const csv = [
-            headers.join(','),
-            ...words.map(w => [
-                `"${w.word}"`,
-                `"${w.type}"`,
-                `"${w.definition}"`,
-                `"${w.phonetic}"`,
-                `"${w.synonyms}"`,
-                `"${w.examples}"`
-            ].join(','))
-        ].join('\n');
-
-        this.downloadFile(csv, 'vocabulary.csv', 'text/csv');
-        Utils.showToast('Vocabulary exported successfully!');
     },
 
     /**

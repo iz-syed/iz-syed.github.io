@@ -49,6 +49,11 @@ const ConversationGenerator = {
         this.resetTracking();
         this.isGenerating = true;
 
+        // Show skeleton loader
+        if (typeof OutputRenderer !== 'undefined') {
+            OutputRenderer.showSkeleton();
+        }
+
         let lines = [];
 
         try {
@@ -74,7 +79,7 @@ const ConversationGenerator = {
             return lines;
 
         } catch (error) {
-            console.error('Conversation generation error:', error);
+            Logger.error('Conversation generation error:', error);
 
             // Fallback on error
             lines = this.generateFromDialogues(topic, difficulty, wordLimit, tone);
@@ -296,9 +301,7 @@ const ConversationGenerator = {
         for (const type of wordTypes) {
             const words = vocab[type] || {};
             for (const word of Object.keys(words)) {
-                // Create regex that also matches common word variations
                 const baseWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                // Match base word and common inflections (e.g., work, works, working, worked)
                 const variations = [
                     baseWord,
                     baseWord + 's',
@@ -313,10 +316,14 @@ const ConversationGenerator = {
 
                 if (regex.test(conversationText)) {
                     this.usedVocabulary[type].add(word);
-                    this.vocabularyDetails[word] = { ...words[word], type: type.slice(0, -1) };
+                    const detail = { ...words[word], type: type.slice(0, -1) };
+                    this.vocabularyDetails[word] = detail;
 
-                    // Also add the lowercase version for case-insensitive tooltip matching
-                    this.vocabularyDetails[word.toLowerCase()] = { ...words[word], type: type.slice(0, -1) };
+                    // Also add the lowercase key for case-insensitive tooltip matching (share same object)
+                    const lowerWord = word.toLowerCase();
+                    if (lowerWord !== word) {
+                        this.vocabularyDetails[lowerWord] = detail;
+                    }
                 }
             }
         }
@@ -325,8 +332,12 @@ const ConversationGenerator = {
             for (const idiom of Object.keys(vocab.idioms)) {
                 if (conversationText.includes(idiom.toLowerCase())) {
                     this.usedVocabulary.idioms.add(idiom);
-                    this.vocabularyDetails[idiom] = { ...vocab.idioms[idiom], type: 'idiom' };
-                    this.vocabularyDetails[idiom.toLowerCase()] = { ...vocab.idioms[idiom], type: 'idiom' };
+                    const detail = { ...vocab.idioms[idiom], type: 'idiom' };
+                    this.vocabularyDetails[idiom] = detail;
+                    const lowerIdiom = idiom.toLowerCase();
+                    if (lowerIdiom !== idiom) {
+                        this.vocabularyDetails[lowerIdiom] = detail;
+                    }
                 }
             }
         }
@@ -335,8 +346,12 @@ const ConversationGenerator = {
             for (const collocation of Object.keys(vocab.collocations)) {
                 if (conversationText.includes(collocation.toLowerCase())) {
                     this.usedVocabulary.collocations.add(collocation);
-                    this.vocabularyDetails[collocation] = { ...vocab.collocations[collocation], type: 'collocation' };
-                    this.vocabularyDetails[collocation.toLowerCase()] = { ...vocab.collocations[collocation], type: 'collocation' };
+                    const detail = { ...vocab.collocations[collocation], type: 'collocation' };
+                    this.vocabularyDetails[collocation] = detail;
+                    const lowerCollocation = collocation.toLowerCase();
+                    if (lowerCollocation !== collocation) {
+                        this.vocabularyDetails[lowerCollocation] = detail;
+                    }
                 }
             }
         }

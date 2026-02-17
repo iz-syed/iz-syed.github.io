@@ -70,8 +70,8 @@ const SpeechController = {
 
             // Find female voice
             this.voices.female = englishVoices.find(v => femalePatterns.test(v.name)) ||
-                                 englishVoices.find(v => v.name.toLowerCase().includes('female')) ||
-                                 englishVoices[0];
+                englishVoices.find(v => v.name.toLowerCase().includes('female')) ||
+                englishVoices[0];
 
             // Find male voice (different from female)
             this.voices.male = englishVoices.find(v =>
@@ -209,12 +209,29 @@ const SpeechController = {
     },
 
     /**
-     * Update progress bar
+     * Update progress bar and visual feedback
      */
     updateProgress() {
-        const progress = (this.state.currentLineIndex / this.state.totalLines) * 100;
+        const progress = this.state.totalLines > 0
+            ? (this.state.currentLineIndex / this.state.totalLines) * 100
+            : 0;
         this.elements.progressFill.style.width = `${progress}%`;
         this.elements.progressText.textContent = `${this.state.currentLineIndex}/${this.state.totalLines} lines`;
+
+        // Visual feedback on progress bar
+        if (this.state.isPlaying && !this.state.isPaused) {
+            this.elements.progressFill.classList.add('active');
+
+            // Highlight current line
+            if (typeof OutputRenderer !== 'undefined' && this.state.currentLineIndex < this.state.totalLines) {
+                OutputRenderer.highlightLine(this.state.currentLineIndex);
+            }
+        } else {
+            this.elements.progressFill.classList.remove('active');
+        }
+
+        // Pulse effect on active buttons? 
+        // Logic handled by CSS .speaking class on container or buttons if we added it
     },
 
     /**
@@ -228,11 +245,19 @@ const SpeechController = {
         // Show play button, hide pause/resume
         this.elements.speakBtn.style.display = 'flex';
         this.elements.speakBtn.disabled = false;
+        this.elements.speakBtn.classList.remove('speaking'); // Remove pulse
+
         this.elements.pauseBtn.style.display = 'none';
         this.elements.pauseBtn.disabled = true;
         this.elements.resumeBtn.style.display = 'none';
         this.elements.stopBtn.disabled = true;
         this.elements.progressFill.style.width = '0%';
+        this.elements.progressFill.classList.remove('active');
+
+        // Clear highlights
+        if (typeof OutputRenderer !== 'undefined') {
+            OutputRenderer.clearHighlights();
+        }
     },
 
     /**
@@ -241,6 +266,7 @@ const SpeechController = {
     cancel() {
         if (this.synth) {
             this.synth.cancel();
+            this.reset();
         }
     }
 };

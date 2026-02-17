@@ -8,7 +8,7 @@ const ThemeManager = {
         const savedTheme = localStorage.getItem('vocabbot-theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
 
-        document.getElementById('themeToggle').addEventListener('click', () => {
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
             this.toggle();
         });
     },
@@ -18,9 +18,5 @@ const ThemeManager = {
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('vocabbot-theme', newTheme);
-    },
-
-    getTheme() {
-        return document.documentElement.getAttribute('data-theme');
     }
 };

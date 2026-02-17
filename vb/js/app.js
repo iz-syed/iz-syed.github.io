@@ -20,6 +20,42 @@ const App = {
             this.initAPISettings();
         }
 
+        // Initialize History modules
+        if (typeof HistoryManager !== 'undefined') {
+            HistoryManager.init();
+        }
+        if (typeof HistoryPanel !== 'undefined') {
+            HistoryPanel.init();
+        }
+
+        // Initialize Topic Selector
+        if (typeof TopicSelector !== 'undefined') {
+            TopicSelector.init();
+        }
+
+        // Initialize Mobile UI
+        if (typeof MobileUI !== 'undefined') {
+            MobileUI.init();
+        }
+
+        // Initialize vocabulary panel
+        VocabPanel.init();
+
+        // Initialize Form State Management
+        if (typeof FormHandler !== 'undefined') {
+            FormHandler.initStateManagement();
+        }
+
+        // Initialize Onboarding
+        if (typeof Onboarding !== 'undefined') {
+            Onboarding.init();
+        }
+
+        // Initialize Keyboard Navigation
+        if (typeof KeyboardNav !== 'undefined') {
+            KeyboardNav.init();
+        }
+
         // Bind form events
         this.bindFormEvents();
 
@@ -126,7 +162,7 @@ const App = {
 
         if (LLMService.isReady()) {
             const providerName = LLMService.providers[LLMService.config.provider]?.name || 'Unknown';
-            statusEl.innerHTML = `<span class="status-dot connected"></span> ${providerName} Connected`;
+            statusEl.innerHTML = `<span class="status-dot connected"></span> ${Utils.escapeHtml(providerName)} Connected`;
             statusEl.className = 'api-status connected';
         } else {
             statusEl.innerHTML = `<span class="status-dot"></span> Not Configured`;
@@ -138,12 +174,12 @@ const App = {
      * Bind form submission and reset events
      */
     bindFormEvents() {
-        document.getElementById('generatorForm').addEventListener('submit', async (e) => {
+        document.getElementById('generatorForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             await this.handleGenerate();
         });
 
-        document.getElementById('resetBtn').addEventListener('click', () => {
+        document.getElementById('resetBtn')?.addEventListener('click', () => {
             this.handleReset();
         });
     },
@@ -153,12 +189,12 @@ const App = {
      */
     bindActionEvents() {
         // Copy button
-        document.getElementById('copyBtn').addEventListener('click', () => {
+        document.getElementById('copyBtn')?.addEventListener('click', () => {
             ExportManager.copyConversation();
         });
 
         // Export conversation button
-        document.getElementById('exportVocabBtn').addEventListener('click', () => {
+        document.getElementById('exportVocabBtn')?.addEventListener('click', () => {
             ExportManager.exportConversation();
         });
     },
@@ -169,7 +205,7 @@ const App = {
     bindDisplayOptionEvents() {
         // Highlight and definition toggles - live update
         ['highlightWords', 'showDefinitions'].forEach(id => {
-            document.getElementById(id).addEventListener('change', () => {
+            document.getElementById(id)?.addEventListener('change', () => {
                 if (ConversationGenerator.currentConversation.length > 0) {
                     const values = FormHandler.getValues();
                     OutputRenderer.render(
@@ -182,9 +218,9 @@ const App = {
         });
 
         // Vocabulary panel toggle
-        document.getElementById('showVocabPanel').addEventListener('change', (e) => {
+        document.getElementById('showVocabPanel')?.addEventListener('change', (e) => {
             const vocabPanel = document.getElementById('vocabPanel');
-            vocabPanel.style.display = e.target.checked ? 'flex' : 'none';
+            if (vocabPanel) vocabPanel.style.display = e.target.checked ? 'flex' : 'none';
         });
     },
 
@@ -235,18 +271,36 @@ const App = {
             // Render vocabulary panel
             VocabPanel.render('all');
 
-            // Close mobile menu if open (so user can see the generated content)
-            if (window.MobileNav && typeof window.MobileNav.closeControlPanelPublic === 'function') {
-                window.MobileNav.closeControlPanelPublic();
+            // Save to history for offline access
+            if (typeof HistoryManager !== 'undefined') {
+                const usingAI = typeof LLMService !== 'undefined' && LLMService.isReady();
+                const historyEntry = HistoryManager.createEntry(
+                    values,
+                    ConversationGenerator.currentConversation,
+                    ConversationGenerator.vocabularyDetails,
+                    ConversationGenerator.usedVocabulary,
+                    usingAI
+                );
+                HistoryManager.save(historyEntry);
+
+                // Update history badge
+                if (typeof HistoryPanel !== 'undefined') {
+                    HistoryPanel.updateBadge();
+                }
             }
 
             // Show success message if using AI
-            if (LLMService.isReady()) {
+            if (typeof LLMService !== 'undefined' && LLMService.isReady()) {
                 Utils.showToast('AI-generated conversation ready!');
             }
 
+            // Hide control panel on mobile for better UX
+            if (typeof MobileUI !== 'undefined') {
+                MobileUI.hideControlPanel();
+            }
+
         } catch (error) {
-            console.error('Generation error:', error);
+            Logger.error('Generation error:', error);
             Utils.showToast('Error generating conversation: ' + error.message, 'error');
         } finally {
             // Reset button state

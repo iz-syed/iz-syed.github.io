@@ -20,7 +20,8 @@
                         <p>English Conversation Generator</p>
                     </div>
                 </div>
-                <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme">
+                <button type="button" class="theme-toggle" id="themeToggle" title="Toggle theme"
+                    aria-label="Toggle between light and dark theme">
                     <span class="theme-icon light-icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
@@ -44,20 +45,34 @@
                 </button>
             </header>
 
-            <!-- AI API Status -->
+            <!-- AI API Status & History Toggle -->
             <div class="api-settings-bar">
                 <div class="api-status" id="apiStatus">
                     <span class="status-dot"></span> Not Configured
                 </div>
-                <button type="button" class="api-settings-btn" id="apiSettingsBtn" title="Configure AI API">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path
-                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                        </path>
-                    </svg>
-                    Settings
-                </button>
+                <div class="header-actions">
+                    <button type="button" class="history-toggle-btn" id="historyToggleBtn" title="View History"
+                        aria-label="View conversation history">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <!-- History -->
+                        <span class="history-badge" id="historyBadge" style="display: none;" aria-label="Saved conversations count">0</span>
+                    </button>
+                    <button type="button" class="api-settings-btn" id="apiSettingsBtn" title="Configure AI API"
+                        aria-label="Configure AI API settings">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                        <!-- Settings -->
+                    </button>
+                </div>
             </div>
 
             <form id="generatorForm" class="control-form" novalidate>
@@ -94,23 +109,7 @@
                     <!-- Topic Section -->
                     <section class="form-section">
                         <h3 class="section-title">Conversation Topic</h3>
-                        <select id="topic" name="topic" class="form-select">
-                            <option value="">-- Select a topic --</option>
-                            <option value="office">Office & Workplace</option>
-                            <option value="home">Home & Family</option>
-                            <option value="shopping">Shopping & Retail</option>
-                            <option value="meeting">Business Meeting</option>
-                            <option value="restaurant">Restaurant & Dining</option>
-                            <option value="travel">Travel & Vacation</option>
-                            <option value="health">Health & Medical</option>
-                            <option value="education">Education & School</option>
-                            <option value="technology">Technology & Gadgets</option>
-                            <option value="sports">Sports & Fitness</option>
-                            <option value="entertainment">Entertainment & Movies</option>
-                            <option value="weather">Weather & Seasons</option>
-                            <option value="finance">Banking & Finance</option>
-                            <option value="socialMedia">Social Media & Internet</option>
-                        </select>
+                        <div id="topicSelectorContainer"></div>
                         <span class="error-message" id="topicError"></span>
                     </section>
 
@@ -214,7 +213,8 @@
                         <div class="output-meta" id="outputMeta"></div>
                     </div>
                     <div class="output-actions">
-                        <button type="button" class="action-btn" id="copyBtn" title="Copy to clipboard">
+                        <button type="button" class="action-btn" id="copyBtn" title="Copy to clipboard"
+                            aria-label="Copy conversation to clipboard">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -222,7 +222,8 @@
                             </svg>
                             <span>Copy</span>
                         </button>
-                        <button type="button" class="action-btn" id="exportVocabBtn" title="Export conversation">
+                        <button type="button" class="action-btn" id="exportVocabBtn" title="Export conversation"
+                            aria-label="Export conversation as text file">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -248,24 +249,27 @@
                         <span class="progress-text" id="speechProgressText">Ready</span>
                     </div>
                     <div class="speech-buttons">
-                        <button type="button" class="speech-btn" id="speakBtn" title="Play">
+                        <button type="button" class="speech-btn" id="speakBtn" title="Play"
+                            aria-label="Play text-to-speech">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <polygon points="5 3 19 12 5 21 5 3"></polygon>
                             </svg>
                         </button>
                         <button type="button" class="speech-btn" id="pauseBtn" title="Pause" disabled
-                            style="display: none;">
+                            style="display: none;" aria-label="Pause text-to-speech">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <rect x="6" y="4" width="4" height="16"></rect>
                                 <rect x="14" y="4" width="4" height="16"></rect>
                             </svg>
                         </button>
-                        <button type="button" class="speech-btn" id="resumeBtn" title="Resume" style="display: none;">
+                        <button type="button" class="speech-btn" id="resumeBtn" title="Resume" style="display: none;"
+                            aria-label="Resume text-to-speech">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <polygon points="5 3 19 12 5 21 5 3"></polygon>
                             </svg>
                         </button>
-                        <button type="button" class="speech-btn" id="stopBtn" title="Stop" disabled>
+                        <button type="button" class="speech-btn" id="stopBtn" title="Stop" disabled
+                            aria-label="Stop text-to-speech">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <rect x="4" y="4" width="16" height="16" rx="2"></rect>
                             </svg>
@@ -292,6 +296,13 @@
         <aside class="vocab-panel" id="vocabPanel">
             <header class="vocab-header">
                 <h3>Vocabulary Reference</h3>
+                <div class="vocab-controls">
+                    <label class="test-mode-toggle" title="Test yourself by hiding definitions">
+                        <input type="checkbox" id="testModeToggle">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Test Mode</span>
+                    </label>
+                </div>
                 <div class="vocab-tabs" id="vocabTabs">
                     <button class="vocab-tab active" data-tab="all">All</button>
                     <button class="vocab-tab" data-tab="nouns">Nouns</button>
@@ -327,7 +338,88 @@
     <div class="tooltip" id="tooltip"></div>
 
     <!-- Toast Notifications -->
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- History Panel Overlay -->
+    <div class="history-overlay" id="historyOverlay"></div>
+
+    <!-- History Panel (Slide-in) -->
+    <aside class="history-panel" id="historyPanel">
+        <header class="history-panel-header">
+            <div class="history-header-top">
+                <div class="history-panel-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <h3>History</h3>
+                </div>
+                <button type="button" class="history-close-btn" id="historyCloseBtn" title="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="history-controls">
+                <div class="history-search">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="historySearch" placeholder="Search topics, words...">
+                </div>
+
+                <div class="history-filters">
+                    <button class="filter-chip active" data-filter="all">All</button>
+                    <button class="filter-chip" data-filter="favorites">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                            </polygon>
+                        </svg>
+                        Favorites
+                    </button>
+                    <select id="historySort" class="history-sort-select">
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="words">Word Count</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <div class="history-panel-info">
+            <p>Your generated conversations are saved locally for offline access. No data is sent to any server.</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="history-empty" id="historyEmpty">
+            <div class="history-empty-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <p>No conversations saved yet</p>
+            <span>Generate a conversation to see it here</span>
+        </div>
+
+        <!-- History List -->
+        <div class="history-list" id="historyList"></div>
+
+        <!-- Clear All Button -->
+        <div class="history-panel-footer">
+            <button type="button" class="history-clear-btn" id="historyClearBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                Clear All History
+            </button>
+        </div>
+    </aside>
 
     <!-- API Settings Modal -->
     <div class="modal-overlay" id="apiSettingsModal">
@@ -383,7 +475,12 @@
     <script src="js/modules/speech.js"></script>
     <script src="js/modules/export.js"></script>
     <script src="js/modules/form-handler.js"></script>
-    <script src="js/modules/mobile-nav.js"></script>
+    <script src="js/modules/history-manager.js"></script>
+    <script src="js/modules/history-panel.js"></script>
+    <script src="js/modules/topic-selector.js"></script>
+    <script src="js/modules/mobile-ui.js"></script>
+    <script src="js/modules/onboarding.js"></script>
+    <script src="js/modules/keyboard-nav.js"></script>
 
     <!-- Main Application -->
     <script src="js/app.js"></script>

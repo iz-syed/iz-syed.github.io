@@ -37,9 +37,23 @@ const LLMService = {
             try {
                 const parsed = JSON.parse(saved);
                 this.config = { ...this.config, ...parsed };
+
+                // Migrate API key from localStorage to sessionStorage (one-time)
+                if (parsed.apiKey) {
+                    sessionStorage.setItem('vocabbot-llm-apikey', parsed.apiKey);
+                    const sanitized = { ...parsed };
+                    delete sanitized.apiKey;
+                    localStorage.setItem('vocabbot-llm-config', JSON.stringify(sanitized));
+                }
             } catch (e) {
-                console.warn('Failed to load LLM config:', e);
+                Logger.warn('Failed to load LLM config:', e);
             }
+        }
+
+        // Load API key from sessionStorage
+        const sessionKey = sessionStorage.getItem('vocabbot-llm-apikey');
+        if (sessionKey) {
+            this.config.apiKey = sessionKey;
         }
     },
 
@@ -47,7 +61,16 @@ const LLMService = {
      * Save configuration
      */
     saveConfig() {
-        localStorage.setItem('vocabbot-llm-config', JSON.stringify(this.config));
+        // Store API key in sessionStorage only (cleared when browser closes)
+        if (this.config.apiKey) {
+            sessionStorage.setItem('vocabbot-llm-apikey', this.config.apiKey);
+        } else {
+            sessionStorage.removeItem('vocabbot-llm-apikey');
+        }
+        // Save non-sensitive config to localStorage (without API key)
+        const configToSave = { ...this.config };
+        delete configToSave.apiKey;
+        localStorage.setItem('vocabbot-llm-config', JSON.stringify(configToSave));
     },
 
     /**
@@ -97,7 +120,8 @@ const LLMService = {
 Requirements:
 - Difficulty: ${difficulty} (${difficultyDesc[difficulty]})
 - Tone: ${toneDesc[tone] || 'neutral'}
-- Length: approximately ${estimatedExchanges} exchanges (about ${wordLimit} words total)
+- CRITICAL LENGTH REQUIREMENT: The conversation MUST be at least ${wordLimit} words total. This is a hard requirement - do not stop early.
+- Aim for ${estimatedExchanges} or more exchanges to reach the word count
 - Make it sound like a real human conversation with natural flow
 - Include greetings, topic discussion, questions, responses, and a natural ending
 - Each speaker should respond meaningfully to what the other person said
@@ -107,13 +131,13 @@ Format each line exactly like this:
 A: [Speaker A's dialogue]
 B: [Speaker B's dialogue]
 
-Start the conversation now:`;
+Generate the full ${wordLimit}-word conversation now:`;
 
         try {
-            const response = await this.callAPI(prompt);
+            const response = await this.callAPI(prompt, wordLimit);
             return this.parseConversation(response);
         } catch (error) {
-            console.error('LLM API Error:', error);
+            Logger.error('LLM API Error:', error);
             throw error;
         }
     },
@@ -121,11 +145,13 @@ Start the conversation now:`;
     /**
      * Call the appropriate API based on provider
      */
-    async callAPI(prompt) {
+    async callAPI(prompt, wordLimit = 100) {
         const provider = this.config.provider;
+        // Calculate max tokens: ~1.5 tokens per word, plus buffer
+        const maxTokens = Math.min(AppConstants.MAX_TOKENS, Math.max(2000, Math.ceil(wordLimit * AppConstants.TOKENS_PER_WORD) + 500));
 
         if (provider === 'groq') {
-            return await this.callGroq(prompt);
+            return await this.callGroq(prompt, maxTokens);
         } else if (provider === 'mlvoca') {
             return await this.callMlvoca(prompt);
         } else {
@@ -136,61 +162,89 @@ Start the conversation now:`;
     /**
      * Call Groq API
      */
-    async callGroq(prompt) {
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${this.config.apiKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: this.config.model || 'llama-3.1-8b-instant',
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'You are a helpful assistant that generates natural English conversations for language learning. Always format conversations with "A:" and "B:" prefixes for each speaker.'
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
-                ],
-                temperature: 0.8,
-                max_tokens: 2000
-            })
-        });
+    async callGroq(prompt, maxTokens = 2000) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), AppConstants.API_TIMEOUT);
 
-        if (!response.ok) {
-            const error = await response.json().catch(() => ({}));
-            throw new Error(error.error?.message || `Groq API error: ${response.status}`);
+        try {
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                signal: controller.signal,
+                headers: {
+                    'Authorization': `Bearer ${this.config.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: this.config.model || 'llama-3.1-8b-instant',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'You are a helpful assistant that generates natural English conversations for language learning. Always format conversations with "A:" and "B:" prefixes for each speaker. Generate complete, long conversations when requested.'
+                        },
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.8,
+                    max_tokens: maxTokens
+                })
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.error?.message || `Groq API error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0]?.message?.content || '';
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error('Request timed out after 30 seconds. Please try again.');
+            }
+            throw error;
         }
-
-        const data = await response.json();
-        return data.choices[0]?.message?.content || '';
     },
 
     /**
      * Call MLVoca API (free, no key required)
      */
     async callMlvoca(prompt) {
-        const response = await fetch('https://mlvoca.com/api/generate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: this.config.model || 'deepseek-r1:1.5b',
-                prompt: `You are a helpful assistant that generates natural English conversations for language learning. Always format conversations with "A:" and "B:" prefixes for each speaker.\n\nUser: ${prompt}\n\nAssistant:`,
-                stream: false
-            })
-        });
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), AppConstants.API_TIMEOUT);
 
-        if (!response.ok) {
-            throw new Error(`MLVoca API error: ${response.status}`);
+        try {
+            const response = await fetch('https://mlvoca.com/api/generate', {
+                method: 'POST',
+                signal: controller.signal,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: this.config.model || 'deepseek-r1:1.5b',
+                    prompt: `You are a helpful assistant that generates natural English conversations for language learning. Always format conversations with "A:" and "B:" prefixes for each speaker.\n\nUser: ${prompt}\n\nAssistant:`,
+                    stream: false
+                })
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`MLVoca API error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.response || '';
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') {
+                throw new Error('Request timed out after 30 seconds. Please try again.');
+            }
+            throw error;
         }
-
-        const data = await response.json();
-        return data.response || '';
     },
 
     /**
@@ -270,7 +324,7 @@ Start the conversation now:`;
             // Shuffle and return as comma-separated string
             return words.sort(() => Math.random() - 0.5).join(', ');
         } catch (e) {
-            console.warn('Failed to get vocabulary words:', e);
+            Logger.warn('Failed to get vocabulary words:', e);
             return '';
         }
     },
